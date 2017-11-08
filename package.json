@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/tomatoaiu/NodeTutorial/issues"
   },
-  "homepage": "https://github.com/tomatoaiu/NodeTutorial#readme"
+  "homepage": "https://github.com/tomatoaiu/NodeTutorial#readme",
+  "dependencies": {
+    "co": "^4.6.0"
+  }
 }
