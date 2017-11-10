@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>jsTree</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+</head>
+<body>
+    <div id="jstree"></div>
+    <script type="text/javascript">
+    $(() => {
+        $('#jstree').jstree({ 'core' : {
+            'data' : [
+                {
+                    'text' : 'Root node 1',
+                    'state' : {
+                        'opened' : true,
+                    },
+                    'children' : [
+                        {
+                            'text' : 'Child 1'
+                        },
+                        {
+                            'text' : 'Child 2'
+                        },
+                    ]
+                }
+            ]
+        }});
+        $(document).on("select_node.jstree", "#jstree", (e, data) => {
+            console.log("document");
+        });
+        $("#jstree").on("select_node.jstree", (e, data) => {
+            console.log("jstree");
+        });
+    });
+    </script>
+</body>
+</html>
