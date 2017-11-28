@@ -21,3 +21,12 @@ async function calcResult() {
 }
 
 calcResult();
+
+(() => {
+    asyncFunc().
+    then(asyncFunc).
+    then(asyncFunc).
+    then((value) => {
+        console.log("then : " + value);
+    })
+})();
