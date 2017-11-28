@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+
+</head>
+<body>
+    <script src="https://unpkg.com/browserfs"></script>
+    <script src="https://unpkg.com/isomorphic-git"></script>
+    <script>
+    /**
+     * 文字列から指定した文字以降を取得
+     * @param  {String} valueStr  対象の文字列
+     * @param  {String} targetStr 指定した文字
+     * @param  {String} type      "last" = lastIndexOf or indexOf
+     * @return {String}           文字列から指定した文字以降を取得 エラーはvalueStr
+     */
+    function getSplitStr(valueStr, targetStr, type){
+        let indexStr;
+        if(type === "last"){
+            indexStr = valueStr.lastIndexOf(targetStr);
+        } else {
+            indexStr = valueStr.indexOf(targetStr);
+        }
+
+        if(indexStr === -1){
+            return valueStr;
+        }
+
+        return valueStr.slice(indexStr + 1);
+    }
+
+    function createFileHierarchyObj(filePath){
+        let name = getSplitStr(filePath, "/", "last"),
+            element = {
+                "text" : name,
+                "path": filePath
+            };
+        BrowserFS.configure({ fs: "IndexedDB", options: {} }, (err) => {
+            if (err) return console.log(err);
+            window.fs.lstat(filePath, (err, stat) => {
+                if (stat.isDirectory()) {
+                    element.type = "folder";
+
+                    window.fs.readdir(filePath, (err, files) => {
+                        element.children = files.map((child) => {
+                            return createFileHierarchyObj(filePath + '/' + child);
+                        });
+                    });
+
+                } else {
+                    element.type = getSplitStr(name, ".", "last");
+                }
+            });
+        });
+        return element;
+    }
+
+    function readFile(){
+        BrowserFS.configure({ fs: "IndexedDB", options: {} }, (err) => {
+            if (err) return console.log(err);
+            window.fs = BrowserFS.BFSRequire("fs");
+            window.fs.readFile ("./README.md", (err, file) => {
+                if (err) {
+                    console.error("Not found dirctory\n"+err);
+                    return;
+                }
+                let fileContent = file.toString();
+                console.log(fileContent);
+            });
+        });
+    }
+
+    async function gitClone(){
+        // require cors-buster
+        await window.git('.').depth(1).clone("http://localhost:3000/?href=https://github.com/wmhilton/isomorphic-git.git");
+        let tree = await createFileHierarchyObj('.');
+        await console.log(tree);
+    }
+
+    BrowserFS.configure({ fs: "IndexedDB", options: {} }, (err) => {
+        if (err) return console.log(err);
+        window.fs = BrowserFS.BFSRequire("fs");
+        gitClone();
+    });
+    </script>
+
+</body>
+</html>
