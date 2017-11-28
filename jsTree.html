@@ -29,9 +29,11 @@
                 }
             ]
         }});
-        $(document).on("select_node.jstree", "#jstree", (e, data) => {
-            console.log("document");
+        $.event.special.select_node = {delegateType: 'click'};
+        $(document).on("select_node.jstree", "#jstree .jstree-anchor", (e, data) => {
+            console.log("document",e);
         });
+
         $("#jstree").on("select_node.jstree", (e, data) => {
             console.log("jstree");
         });
