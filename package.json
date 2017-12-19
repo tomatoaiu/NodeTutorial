@@ -19,6 +19,7 @@
   "homepage": "https://github.com/tomatoaiu/NodeTutorial#readme",
   "dependencies": {
     "co": "^4.6.0",
+    "osmosis": "^1.1.5",
     "vue": "^2.5.10"
   }
 }
