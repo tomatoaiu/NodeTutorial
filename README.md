@@ -15,3 +15,11 @@ node main
 node async
 node co
 ```
+
+### test
+```sh
+# BDD
+mocha js/mocha.js
+# TDD
+mocha --ui tdd js/mocha-tdd.js
+```
